@@ -1,44 +1,48 @@
-import React, { useState } from "react";
-import moon from "../assets/destination/image-moon.png";
-import titan from "../assets/destination/image-titan.png";
-import mars from "../assets/destination/image-mars.png";
-import europa from "../assets/destination/image-europa.png";
-import data from "../data";
+import React, { useState, useEffect } from "react";
+import Moon from "../assets/images/image-moon.png";
+import Europa from "../assets/images/image-europa.png";
+import Titan from "../assets/images/image-titan.png";
+import Mars from "../assets/images/image-mars.png";
+import data from "./data";
 
 function Destination() {
-  console.log(data);
   const [planetNumber, setPlanetNumber] = useState(0);
+  useEffect(() => {}, [planetNumber]);
 
-  const planetImages = {
-    moon,
-    mars,
-    europa,
-    titan,
-  };
+  const navigation = React.useRef();
 
   const tabChange = (e) => {
-    console.log(e);
+    setPlanetNumber(e.target.dataset.index);
+    const tabs = Array.from(navigation.current.children);
 
-    if(e.target.dataset.index){
-      setPlanetNumber(e.target.dataset.index)
-    
-      e.target.classList.add("activate")
-    
-    }
+    tabs.forEach((tab) => {
+      tab.classList.remove("activate");
+    });
 
+    e.target.classList.add("activate");
+  };
+
+  const planetImages = {
+    Moon: Moon,
+    Europa: Europa,
+    Titan: Titan,
+    Mars: Mars,
   };
 
   return (
     <div className="destination">
       <div className="destination-content">
         <h1 className="destination-content-subtitle">
-          <span>00</span> Pick your destination
+          <span>{planetNumber}</span> Pick your destination
         </h1>
 
         <div className="destination-content-image">
-          <img src={planetImages.moon} alt="planets" />
+          <img
+            src={planetImages[data.destinations[planetNumber].name]}
+            alt="planets"
+          />
         </div>
-        <div className="destination-content-navigation">
+        <div ref={navigation} className="destination-content-navigation">
           <div data-index={0} className="tab activate" onClick={tabChange}>
             Moon
           </div>
@@ -60,12 +64,12 @@ function Destination() {
         </p>
         <div className="destination-content-info">
           <div className="distance">
-            <p>Average distance</p>
-            <h1>{data.destinations[planetNumber].distance}</h1>
+            <p className="avg-distance">Average distance</p>
+            <h1 className="h1">{data.destinations[planetNumber].distance}</h1>
           </div>
           <div className="time">
-            <p>Estimated Travel Time</p>
-            <h1>{data.destinations[planetNumber].travel}</h1>
+            <p className="avg-distance">Estimated Travel Time</p>
+            <h1 className="h1">{data.destinations[planetNumber].travel}</h1>
           </div>
         </div>
       </div>
